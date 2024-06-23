@@ -1,12 +1,13 @@
 // AuthPage.js
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, Button, View } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View ,TouchableOpacity} from 'react-native';
 import {auth, store} from '../firebaseConfig';
 // import { collection, doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { AuthStackParamList } from './auth';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { collection, setDoc, doc } from "firebase/firestore";
+import { Icon } from '@rneui/themed';
 
 
 type SignUpScreen = NativeStackScreenProps<AuthStackParamList,'Login'>;
@@ -17,6 +18,7 @@ const SignUp: React.FC<SignUpScreen> = ({navigation}) => {
   const [user, setUser] = useState('');
   const [Error,setError] = useState(null);
   const [success,setSuccess] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const handleSignup = async () => {
     try {
@@ -45,13 +47,25 @@ const SignUp: React.FC<SignUpScreen> = ({navigation}) => {
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
+          <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!isPasswordVisible}
+        />
+        <TouchableOpacity
+          style={styles.eyeIcon}
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+        >
+          <Icon
+            name={isPasswordVisible ? 'eye' : 'eye-off'}
+            type='ionicon'
+            size={24}
           />
+        </TouchableOpacity>
+      </View>
           <Button title="Sign Up" onPress={handleSignup} />
           <Button title="already have a account" onPress={handleLogin} color={'grey'}/>
           {Error && <Text style={styles.error}>{Error}</Text>}
@@ -65,13 +79,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+    backgroundColor:'yellow'
   },
   input: {
+    width:'100%',
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  eyeIcon: {
+    marginLeft:-35,
+    marginBottom:10,
+    alignContent:'center',
   },
   error:{
     color: 'red'
