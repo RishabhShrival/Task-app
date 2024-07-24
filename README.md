@@ -160,9 +160,6 @@ Dev Dependencies:
     eas build
     ```
 
-## Download Link
-
-[Download the APK](https://expo.dev/artifacts/eas/4KwvT2RehHHZiD4CqWgExQ.apk)
 
 ## Additional Information
 
